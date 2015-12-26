@@ -76,15 +76,10 @@ MainDataTogether$Activity <- ordered( MainDataTogether$Activity,levels=c(1,2,3,4
 
 # Preparing the tidy data set
 dim(MainDataTogether)
-p <- MainDataTogether[,lapply(.SD, mean), by=SubjectID]
-dim(p)
-q <- MainDataTogether[, lapply(.SD, mean), by=Activity]
-AverageBySubject <- select(p, -Activity)
-AverageByActivity <- select(q, -SubjectID)
-View(AverageBySubject)
-View(AverageByActivity)
-write.table(AverageByActivity, file="./DataCleanProjectSubmission_Rujuta.txt", append=FALSE, row.names=TRUE)
-write.table(AverageBySubject, file="./DataCleanProjectSubmission_Rujuta.txt", append=TRUE, row.names=TRUE)
+# using the %>% use first the groupings and then take the means
+p <- MainDataTogether%>%group_by(SubjectID, Activity)%>%summarise_each(funs(mean))
+write.table(p, file="./DataSubmissionFile.txt", append=FALSE, row.names=FALSE)
+
 # so this is the file that gets uploaded on the github.
 
 
