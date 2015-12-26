@@ -4,7 +4,6 @@ This repository is for Project Submission for Data Clean Project for Coursera Co
 title: "DataCleanProject_Rujuta"
 author: "Rujuta Joshi"
 date: "Friday, December 18, 2015"
-output: html_document
 --
 
 # Objective of the project : 
@@ -38,109 +37,109 @@ To complete the assignment, we need to take the following steps.
 
 
 #The detailed activities in the project. 
-
-## Step 1 : First Download the Data, and Unzip it. 
-```{r}
-# first download the data- since its a heavy download, i am putting this as comment, so as to not download everytime. 
-# fileurl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-# getwd()
-setwd("F:/Rujuta/Coursera/DataCleanSubject")
-#download.file(fileurl, destfile="./Data.zip")
-#unzip("./Data.zip")
-library(dplyr); library(data.table)
-
-```
-## Step 2 
-
-```{r}
-# setwd("./UCI HAR Dataset")
-list.files()
-features <- read.table("./features.txt")
-setwd("./train")
-X_traindata <- read.table("./X_train.txt")
-XTrainDataSet <- data.table(X_traindata)
-y_traindata <- read.table("./y_train.txt")
-YTrainData <- data.table(y_traindata)
-subject_traindata <- read.table("./subject_train.txt")
-SubjectTrainData <- data.table(subject_traindata)
-FeatureData <- data.table(features)
-names <- as.character(features$V2)
-setnames(TrainData, colnames(TrainData), names)
-```
-## Step 3
-#merge subjectID and Activity name with the test data.
-```{r}
-dim(YTrainData)
-setnames(YTrainData, "Activity")
-dim(SubjectTrainData)
-setnames(SubjectTrainData, "SubjectID")
-TrainData1 <- cbind(SubjectTrainData,YTrainData, TrainData)
-dim(TrainData1)
-```
-## Step 4 
-## Do the same activity with test data. 
-```{r}
-setwd("./test")
-list.files()
-X_testdata <- read.table("./X_test.txt")
-dim(X_testdata)
-TestData <- data.table(X_testdata)
-setnames(TestData, colnames(TestData), names)
-y_testdata <- read.table("./y_test.txt")
-YTestData <- data.table(y_testdata)
-dim(YTestData)
-setnames(YTestData, "Activity")
-SUbjectTestData <- fread("./subject_test.txt")
-dim(SUbjectTestData)
-setnames(SUbjectTestData, "SubjectID")
-TestData1 <- cbind(SUbjectTestData,YTestData,TestData)
-dim(TestData1)
-```
-## Step5 
-## combine Test and Train Data. 
-```{r}
-MainData <- rbind(TestData1, TrainData1)
-dim(MainData)
-# So this is the final Data. 
-```
-## Step6
-## select only the mean and std variables from the data. 
-```{r}
-MainDataslice1 <- select(MainData, contains("mean"))
-MainDataslice2 <- select(MainData, contains("std"))
-MainDataSlice3 <- select(MainData, SubjectID,Activity)
-MainDataTogether <- cbind(MainDataSlice3, MainDataslice1, MainDataslice2)
-dim(MainDataTogether)
-# now to give the activity Lables
-ActivityLabels <- c("WALKING","WALKING_UPSTAIRS","WALKING DOWNSTAIRS","SITTING","STANDING","LAYING")
-MainDataTogether$Activity <- ordered( MainDataTogether$Activity,levels=c(1,2,3,4,5,6),labels=ActivityLabels)
-```
-
-# Preparing the tidy data set
-# now to give the activity Lables
-```{r}
-ActivityLabels <- c("WALKING","WALKING_UPSTAIRS","WALKING DOWNSTAIRS","SITTING","STANDING","LAYING")
-MainDataTogether$Activity <- ordered( MainDataTogether$Activity,levels=c(1,2,3,4,5,6),labels=ActivityLabels)
-```
-
-# Preparing the tidy data set
-
-```{r}
-dim(MainDataTogether)
-p <- MainDataTogether[,lapply(.SD, mean), by=SubjectID]
-dim(p)
-q <- MainDataTogether[, lapply(.SD, mean), by=Activity]
-AverageBySubject <- select(p, -Activity)
-AverageByActivity <- select(q, -SubjectID)
-View(AverageBySubject)
-View(AverageByActivity)
-write.table(AverageByActivity, file="./DataCleanProjectSubmission_Rujuta.txt", append=FALSE, row.names=FALSE)
-write.table(AverageBySubject, file="./DataCleanProjectSubmission_Rujuta.txt", append=TRUE, row.names=FALSE)
-  # so this is the file that gets uploaded on the github.
-
-THE END
+ Step 1 : First Download the Data, and Unzip it. 
+Step 2 : Read the data files, from X Data file, Y Data  and Subject IDs.
+Step 3 :merge subjectID and Activity name with the test data.
+Step 4 :  Do the same activity with test data. 
+Step5 : combine Test and Train Data. 
+Step6 :select only the mean and std variables from the data. 
+Step 7:  Preparing the tidy data set
 
 
+
+Codebook for the output file. 
+The file is 180 records having 88 variables.  
+The Variables are  SUbject ID, Activity, and All the variables that include either Std or mean in the definition. 
+The records are for each subject, by each activity the means of each of the parameter.
+The Variable names. 
+1	SubjectID
+2	Activity
+3	tBodyAcc-mean()-X
+4	tBodyAcc-mean()-Y
+5	tBodyAcc-mean()-Z
+6	tGravityAcc-mean()-X
+7	tGravityAcc-mean()-Y
+8	tGravityAcc-mean()-Z
+9	tBodyAccJerk-mean()-X
+10	tBodyAccJerk-mean()-Y
+11	tBodyAccJerk-mean()-Z
+12	tBodyGyro-mean()-X
+13	tBodyGyro-mean()-Y
+14	tBodyGyro-mean()-Z
+15	tBodyGyroJerk-mean()-X
+16	tBodyGyroJerk-mean()-Y
+17	tBodyGyroJerk-mean()-Z
+18	tBodyAccMag-mean()
+19	tGravityAccMag-mean()
+20	tBodyAccJerkMag-mean()
+21	tBodyGyroMag-mean()
+22	tBodyGyroJerkMag-mean()
+23	fBodyAcc-mean()-X
+24	fBodyAcc-mean()-Y
+25	fBodyAcc-mean()-Z
+26	fBodyAcc-meanFreq()-X
+27	fBodyAcc-meanFreq()-Y
+28	fBodyAcc-meanFreq()-Z
+29	fBodyAccJerk-mean()-X
+30	fBodyAccJerk-mean()-Y
+31	fBodyAccJerk-mean()-Z
+32	fBodyAccJerk-meanFreq()-X
+33	fBodyAccJerk-meanFreq()-Y
+34	fBodyAccJerk-meanFreq()-Z
+35	fBodyGyro-mean()-X
+36	fBodyGyro-mean()-Y
+37	fBodyGyro-mean()-Z
+38	fBodyGyro-meanFreq()-X
+39	fBodyGyro-meanFreq()-Y
+40	fBodyGyro-meanFreq()-Z
+41	fBodyAccMag-mean()
+42	fBodyAccMag-meanFreq()
+43	fBodyBodyAccJerkMag-mean()
+44	fBodyBodyAccJerkMag-meanFreq()
+45	fBodyBodyGyroMag-mean()
+46	fBodyBodyGyroMag-meanFreq()
+47	fBodyBodyGyroJerkMag-mean()
+48	fBodyBodyGyroJerkMag-meanFreq()
+49	angle(tBodyAccMean,gravity)
+50	angle(tBodyAccJerkMean),gravityMean)
+51	angle(tBodyGyroMean,gravityMean)
+52	angle(tBodyGyroJerkMean,gravityMean)
+53	angle(X,gravityMean)
+54	angle(Y,gravityMean)
+55	angle(Z,gravityMean)
+56	tBodyAcc-std()-X
+57	tBodyAcc-std()-Y
+58	tBodyAcc-std()-Z
+59	tGravityAcc-std()-X
+60	tGravityAcc-std()-Y
+61	tGravityAcc-std()-Z
+62	tBodyAccJerk-std()-X
+63	tBodyAccJerk-std()-Y
+64	tBodyAccJerk-std()-Z
+65	tBodyGyro-std()-X
+66	tBodyGyro-std()-Y
+67	tBodyGyro-std()-Z
+68	tBodyGyroJerk-std()-X
+69	tBodyGyroJerk-std()-Y
+70	tBodyGyroJerk-std()-Z
+71	tBodyAccMag-std()
+72	tGravityAccMag-std()
+73	tBodyAccJerkMag-std()
+74	tBodyGyroMag-std()
+75	tBodyGyroJerkMag-std()
+76	fBodyAcc-std()-X
+77	fBodyAcc-std()-Y
+78	fBodyAcc-std()-Z
+79	fBodyAccJerk-std()-X
+80	fBodyAccJerk-std()-Y
+81	fBodyAccJerk-std()-Z
+82	fBodyGyro-std()-X
+83	fBodyGyro-std()-Y
+84	fBodyGyro-std()-Z
+85	fBodyAccMag-std()
+86	fBodyBodyAccJerkMag-std()
+87	fBodyBodyGyroMag-std()
+88	fBodyBodyGyroJerkMag-std()
 
 
 
