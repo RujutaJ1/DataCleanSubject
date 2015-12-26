@@ -23,7 +23,7 @@ subject_traindata <- read.table("./subject_train.txt")
 SubjectTrainData <- data.table(subject_traindata)
 FeatureData <- data.table(features)
 names <- as.character(features$V2)
-setnames(TrainData, colnames(TrainData), names)
+setnames(X_trainData, colnames(X_trainData), names)
 
 ## Step 3
 #merge subjectID and Activity name with the test data.
@@ -31,7 +31,7 @@ dim(YTrainData)
 setnames(YTrainData, "Activity")
 dim(SubjectTrainData)
 setnames(SubjectTrainData, "SubjectID")
-TrainData1 <- cbind(SubjectTrainData,YTrainData, TrainData)
+TrainData1 <- cbind(SubjectTrainData,YTrainData, X_trainData)
 dim(TrainData1)
 
 ## Step 4 
@@ -83,8 +83,8 @@ AverageBySubject <- select(p, -Activity)
 AverageByActivity <- select(q, -SubjectID)
 View(AverageBySubject)
 View(AverageByActivity)
-write.table(AverageByActivity, file="./DataCleanProjectSubmission_Rujuta.txt", append=FALSE, row.names=FALSE)
-write.table(AverageBySubject, file="./DataCleanProjectSubmission_Rujuta.txt", append=TRUE, row.names=FALSE)
+write.table(AverageByActivity, file="./DataCleanProjectSubmission_Rujuta.txt", append=FALSE, row.names=TRUE)
+write.table(AverageBySubject, file="./DataCleanProjectSubmission_Rujuta.txt", append=TRUE, row.names=TRUE)
 # so this is the file that gets uploaded on the github.
 
 
