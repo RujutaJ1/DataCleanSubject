@@ -47,11 +47,11 @@ Step 7:  Preparing the tidy data set
 
 
 
-Codebook for the output file. 
+#Codebook for the output file. 
 The file is 180 records having 88 variables.  
 The Variables are  SUbject ID, Activity, and All the variables that include either Std or mean in the definition. 
 The records are for each subject, by each activity the means of each of the parameter.
-The Variable names. 
+##The Variable names. 
 1	SubjectID
 2	Activity
 3	tBodyAcc-mean()-X
